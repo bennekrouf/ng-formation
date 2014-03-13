@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+    <!-- Styles custom  -->
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.1/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular-mocks.js"></script>
+
+   
+    <script type="text/javascript" src="formation.js"></script>
+    
+    <title>Site Business</title>
+
+    <style type="text/css">
+        .big { font-weight: bold; }
+    </style>
+
+    <body ng-app="formationApp" ng-controller="formation">
+        <form ng-submit="addArticle()"class="form-inline" role="form">
+
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Référence Article</th>
+                        <th>Libellé</th>
+                        <th>Prix</th>
+                        <th>Quantité</th>
+                        <th>Montant HT</th>
+                        <th>Montant TTC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="article in articles track by $index" ng-class="{big: prixArticleHT(article) > 1000}">
+                        <td>{{article.refArticle}}</td>
+                        <td>{{article.libelle}}</td>
+                        <td>{{article.prix}}</td>
+                        <td><input type="number" ng-model="article.qtt"></td>
+                        <td ng-bind="prixArticleHT(article)">
+                        <td ng-bind="prixArticleTTC(article)">
+                        <td>
+                            <button type="button" ng-click="delete($index)" class="btn btn-warning">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Total HT : {{prixTotalHT()}}</td>
+                        <td>Total TTC : {{prixTotalTTC()}}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+            <div class="form-group">
+                <label class="sr-only" for="">label</label>
+
+                <select class="form-control" ng-model="nArticle" 
+                        ng-options="reference.libelle for reference in references">
+                </select>
+                <input type="number" class="form-control" ng-model="nArticle.qtt" placeholder="Quantité">
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+
+    </body>
+</html>

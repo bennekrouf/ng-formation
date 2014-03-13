@@ -1,0 +1,40 @@
+
+  <div class="row" style="">
+   		<div class="col-md-8" style="margin: 15px 0 0;">
+		<div class="panel panel-default">
+			<!-- Default panel contents -->
+			<div class="panel-heading">{{livre.title}}
+
+			<button type="button" ng-click='panier.populePanier(livre)' class="btn btn-success">add</button>
+
+			</div>
+
+			<div class="panel-body">
+				<p>{{livre.author}}</p>
+				<!-- Table -->
+				<table class="table">
+					<thead>
+						<tr>
+							<th ng-bind-html="livre.desc"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><td>ISBN10 : {{livre.ISBN10}}</td>
+						<tr><td>ISBN13 : {{livre.ISBN13}}</td>
+						<tr><td>{{livre.publisher}}</td>
+						<tr><td>{{livre.rating}}</td>
+						<tr><td>{{livre.price}}</td>
+						<tr><td>{{livre.pages}}</td>
+						</tr><tr>
+							<td><img ng-src={{livre.image}} class="img-thumbnail" alt={{livre.price}}></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+		</div>   		
+		</div>
+	   		<div class="col-md-4" style="margin: 15px 0 0;">
+	   			<div ng-include="'partials/stats.html'"></div>
+	   		</div>
+		</div>

@@ -3,22 +3,25 @@ ng-formation
 
 Exo de Formation
 
+## Installation
 
-### Setup
+	clone https://github.com/bennekrouf/ng-formation.git
+	npm install
 
-Démarrer le serveur :
+## Exécution
 
-node server.js
+### Démarrer le serveur :
 
+	node server.js
 
-Démarrer Selenium
- webdriver-manager start
+### Démarrer Selenium
 
-Démarrer le watcher de test :
-grunt test
+	webdriver-manager start
 
-Lancer les tests fonctionnels :
-grunt
+### Démarrer le watcher de test :
 
+	grunt test
 
-
+### Lancer les tests fonctionnels :
+	
+	grunt
