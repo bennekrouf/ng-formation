@@ -4,6 +4,34 @@ var app = angular.module('formationApp', ['formationApp.controller', 'ngRoute', 
 	$scope.panier = panier;
 })
 
+
+.directive('stars', function(){
+	return function(scope, element, attrs){
+		var nb, max;
+
+		scope.$watch(attrs.stars, function(value){
+			nb =+ value;
+			draw(element, nb, max);
+		});
+
+		scope.$watch(attrs.maxStars, function(value){
+			max =+ value;
+			draw(element, nb, max);
+		});
+
+		function draw(element, nb, max){
+			var markup = '';
+			for(var i=0; i<nb;i++){
+				markup += "<img src='img/star.png' class='img-responsive' alt='Image'>";				
+			}
+			for(var i=0; i<max;i++){
+				markup += "<img src='img/empty-star.png' class='img-responsive' alt='Image'>";				
+			}
+			element.html(markup);
+		}
+	}
+})
+
 .filter('interval', function(){
 	return function(input, min, max){
 		return input.filter(function(item){

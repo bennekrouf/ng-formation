@@ -1,0 +1,45 @@
+<html>
+<head>
+  <title>AngularJS - directive Google Maps</title>
+  <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+
+  <script src="angular.js"></script> 
+
+  <script src="app.js"></script> 
+  <link rel="stylesheet" href="app.css"/>
+</head>
+
+<body ng-app="app" ng-controller="Ctrl">
+  
+  <div class="repeat" ng-repeat="map in maps">
+    
+
+  <gmaps center="map.center" zoom="map.zoom" style="height: 500px">
+
+  </gmaps>
+
+
+    <div class="data">
+      <p>
+        <label>Latitude</label>
+        <input type="number" ng-model = "map.center.lat"/>
+      </p>
+      <p>
+        <label>Longitude</label>
+        <input type="number"  ng-model = "map.center.lng"/>
+      </p>
+      <p>
+        <label>Zoom</label>
+        <input type="number" ng-model = "map.zoom"/>
+      </p>
+    </div>
+
+
+  </div>
+  
+  
+
+</body>
+
+</html> 

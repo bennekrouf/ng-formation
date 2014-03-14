@@ -514,6 +514,64 @@ Afficher un message d'erreur sur un texte trop court :
 [required]
 [ng-required="exp"] // requis en fonction d'autres choses
 ng-minlength="number" // nbr entier
+ng-maxlength
+ng-pattern="string" // regex en dur ou expression, validation par rapport à une expression
 
 
-	
+### Inputs variés
+
+input type="email"
+input type="url"
+input type="number"  avec les attributs min, max pour la valeur numérique maximale ou min // ** buggé **
+
+### checkbox et radio
+
+- checkbox - attributs
+	ng-model
+	name
+	ng-change
+	ng-true-false="string" : (chaine) // : valeur si case cochée
+	ng-false-true="string" : (chaine) // : valeur si case non cochée
+
+- radio
+	ng-model : les radios doivent avoir le même ng-model
+	name
+	ng-change
+	value : valeur sélectionnée
+
+### select
+
+Toujours utiliser le ng-options pour la liste et ne pas faire de ng-repeat dans le option
+
+required
+ng-required
+
+### button
+
+ng-disabled
+disabled : éviter d'utiliser des expressions dans un disabled car par supporté par IE8
+
+### $error
+
+on pourra avoir :
+required
+minglength
+max
+number
+min
+max ...
+
+### Mais on peut créer des validateurs custom grâce à des directives
+
+link: function(scope, elm, attrs, crtl)
+
+	ctrl.$parsers.unshift(function(viewValue){
+		....
+		ctrl.$setValidity('integer', true) // ou false si c'est invalide
+		return viewValue // ou undefined
+		})
+
+
+
+
+

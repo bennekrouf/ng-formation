@@ -1,0 +1,19 @@
+{
+  "name": "app-service-panier",
+  "version": "0.0.0",
+  "homepage": "https://github.com/bennekrouf/ng-formation",
+  "authors": [
+    "mohamed bennekrouf <mohamed.bennekrouf@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-rating-input": "~0.2.4"
+  }
+}
