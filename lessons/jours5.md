@@ -1,4 +1,4 @@
-# Jours 5 : event, directives
+# Jours 5 : event, directives, best practices, animations
 =============================================================
 
 ## ecouter un event
@@ -294,6 +294,192 @@ L'objet event contient les properties :
 		'element' // extrait l'élement lui même et son contenu : on peut insérer l'ancien élément à l'endroit indiqué par transclude
 
 - on peut récupérer le transclude en le passant en param de la fonction link
+
+
+### Controller
+
+use case : partage de controleur entres directives
+
+- Une directive peut créer un controleur.
+
+- le controleur sera instancié avant la phase pre-link
+- ce même objet peut être partagé avec d'autres directives
+	- placées sur le même élément ou des éléments enfants
+	- si elles y accèdent avec la propriété require
+
+- on peut lui injecter des services (non positionnelles)
+	$scope // scope local de l'élément
+	$element // 
+
+- prop :  name
+	- nom sous lequel est publié le controleur crée par la directive
+
+
+### require (string|array[string]) **A reprendre des slides **
+- controleur requis par la directive
+
+require: ['ngBind', '?ngClass', '^ngView']
+
+
+### Scope isolé en version 1.2.0
+
+- le scope ne s'applique plus à tout l'élément
+- la directive qui créé le scope isolée est la seule à le voir, les autres directives du même élément reçoivent le scope parent
+
+- si elle n'a pas de template : le contenu de l'élément est sur le scope parent (en 1.1 sur le scope parent)
+
+### TU de directives
+
+	inject(function($compile, $rootScope){
+		var element = $compile('<span directivemachin></span>')($rootScope) 
+
+		// service qui sert à publier un morceau de template, il renvoit une fonction link, que l'on appel en passant le scope
+
+		// element: objet jquery avec le span
+		})
+
+
+
+# Bonnes pratiques
+
+- "use strict" sur le JS
+
+- ne pas polluer le contenu global en utilisant des wrapper anonymes
+ -- mettre tout le contenu de chaque fichier dans un wrapper anonyme
+ -- mettre les controleurs dans des modules et non en fonction globales
+
+
+##Pattern MVVM : model - view - ViewModel
+
+- ViewModel : ce n'est pas le scope
+il est géré dans les services
+publier dans le scope seulement les parties du modèle nécessaires à une vue
+
+model : serveur
+view et viewModel : angular
+
+## Dirty Checking
+
+- travailler sur des états du scope, c'est rare que ça soit pertinent de manipuler des event
+
+- utiliser scope.$watch
+	- pour associer un traitement à un changement d'état
+	- utile losrqu'on a un calcul et qu'on ne veut pas le refaire systématiquement
+	- non sur chaque digest
+	- ne jamais mettre un watch sur un calcul lourd : le faire dans un watch puis le stocker
+
+## Controleur léger
+
+- garder les controleurs simple
+
+- parser les saisies: on crée un parser pour NgModelController ($parsers)
+
+- formattage des données d'un champ de saisie : $formatters
+
+- partager du code entre controleurs : utiliser plutot des services
+
+- pas de manip de DOM dans un controleurs (pas de element hors d'une directive)
+
+## Services simples
+
+- mettre la logique métier dans les services
+
+- séparer les problématiques
+
+## $rootScope VS controleur global VS service
+
+- rootScope : avantage : injectable dans les services, disponible partout dans la vue, 
+attention à ne pas le changer car des watches dans le rootScope seront vérifié sur tous les event de l'app
+
+- controleur global
+inutilisable dans les services
+
+- service
+bon endroit pour la logique et les manipulations de données
+accessible depuis la vue tant qu'il n'est pas publié dans le scope
+
+compromis :
+- faire un service avec toute la logique
+- publié dans le $rootScope s'il est utilisé à de nombreux endroits
+- préférer un controleur local
+	- les controleurs doivent pouvoir s'exécuter sans view
+
+
+## Gestion des erreurs
+
+- le mettre tot dans le projet
+- sources d'erreur:
+	- interceptor : pour les erreurs http
+	- $exceptionHandler : à surcharger car il a les exceptions interceptées par Angular
+
+- utiliser les promises
+	- simplifie l'asynchrone
+	- et la centralisation des erreurs
+
+## ngInclude
+
+- prend une expression dans l'attribut src : mettre une valeur en dure entre apostrophes à l'intérieur des guillements
+
+ou bien avec une expression le template est rechargé si la valeur de l'expression change
+
+- cela permet de calculer cette valeur
+
+- on utilise ngView pour naviguer entre nouvelle page et mettre ngInclude à l'intérieur d'une vue (sans ajouter d'entrée dans l'historique du navigateur)
+
+
+## Template inline
+
+	<script type="text/ng-template" id="/tpl.html">
+		content
+	</script>
+
+** voir slides **
+
+## templates récursifs
+
+** voir slides **
+
+
+le include récursif est une solution lourde
+
+voir la directive de Chatel : angular-treeRepeat qui est un ng-repeat récursif
+
+
+## Astuces diverses
+
+- $cacheFactory. use case : service global pour conserver l'état d'une page
+
+- on peut faire des directives correspondant aux éléments std du HTML
+
+## Danger dans des types primitifs dans le scope
+
+- l'utilisation de types primitifs dans le scope est source d'erreurs
+
+- pb si on fait un ng-repeat sur un tableau de types primitifs et qu'on veut les modifer par i, ngModel
+	car en JS les types primitifs sont passés par copie
+
+- de même si scope parent et enfant
+
+- en 1.1.5
+
+	ng-controller="ctrl as ctrl" // publie le controleur dans le scope sous le nom ctrl
+
+	// ainsi on peut se passer de $scope et tout mettre dans this
+
+
+## Animations
+
+- module optionnel ngAnimate / ng-animate.js
+
+- 3 groupes animations
+
+-- transitions CSS (>=10) : event : leave ou mode : début sur .ng-leave, fin sur lg-leave-active ...
+
+-- animations CSS (>=10)
+
+-- Sans CSS (jquery) : ajout d'une 
+
+
 
 
 

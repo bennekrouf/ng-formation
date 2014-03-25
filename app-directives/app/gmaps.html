@@ -1,19 +1,13 @@
 <div>
-	<div class="gmaps">
-	
-	</div>
-
-
+	<div class="gmaps"></div>
 	<form role="form">
 		<input type="text" name="" id="input" class="form-control" ng-model="label">
 		<button type="submit" class="btn btn-primary" ng-click="snap(snapshot)" >Snap</button>
 	</form>
-
 	<div>
 		<button ng-repeat="snapshot in snapshots" 
 					type="button" class="btn btn-default btn-lg" ng-click="selectSnapshot(snapshot)">
 					{{snapshot.label}}
 		</button>
 	</div>
-
 </div>

@@ -1,3 +1,7 @@
 input.ng-invalid, select.ng-invalid{
   border: solid 2px red;
 }
+
+field-radius {
+	border-radius: 100px; 
+}

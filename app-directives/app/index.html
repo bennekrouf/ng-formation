@@ -1,45 +1,50 @@
 <html>
-<head>
-  <title>AngularJS - directive Google Maps</title>
-  <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
+  <head>
+    <title>Directives & Google Maps</title>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="angular.js"></script> 
+    <script src="app.js"></script> 
+    <link rel="stylesheet" href="app.css"/>
+  </head>
 
-  <script src="angular.js"></script> 
+  <body ng-app="app" ng-controller="Ctrl">
 
-  <script src="app.js"></script> 
-  <link rel="stylesheet" href="app.css"/>
-</head>
+    <div class="repeat" ng-repeat="map in maps">
 
-<body ng-app="app" ng-controller="Ctrl">
-  
-  <div class="repeat" ng-repeat="map in maps">
-    
+      <div style="margin-right:auto; margin-right:0px;">
+        <gmaps center="map.center" zoom="map.zoom" style="height: 500px"></gmaps>
+      </div>    
 
-  <gmaps center="map.center" zoom="map.zoom" style="height: 500px">
+      <div class="data">
 
-  </gmaps>
+        <p>
+          <label>Latitude</label>
+          <input type="number" ng-model = "map.center.lat"/>
+        </p>
 
+        <p>
+          <label>Longitude</label>
+          <input type="number"  ng-model = "map.center.lng"/>
+        </p>
 
-    <div class="data">
-      <p>
-        <label>Latitude</label>
-        <input type="number" ng-model = "map.center.lat"/>
-      </p>
-      <p>
-        <label>Longitude</label>
-        <input type="number"  ng-model = "map.center.lng"/>
-      </p>
-      <p>
-        <label>Zoom</label>
-        <input type="number" ng-model = "map.zoom"/>
-      </p>
+        <p>
+          <label>Zoom</label>
+          <input type="number" ng-model = "map.zoom"/>
+        </p>
+
+      </div>
+
     </div>
 
 
-  </div>
-  
-  
+    <div class="repeat" ng-repeat="map in maps">
 
-</body>
+      <div style="margin-right:auto; margin-right:0px;">
+        <gmaps center="map.center" zoom="map.zoom+2" style="height: 500px"></gmaps>
+      </div>    
 
+    </div>
+
+  </body>
 </html> 

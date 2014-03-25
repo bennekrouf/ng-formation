@@ -6,36 +6,36 @@
 ## Rafraichissement des vues
 
 - dirty checking:
-	- parcours une série de watch : si nouvelle valeur différente de l'ancienne alors exécute le code associé
+	- parcours une sÃ©rie de watch : si nouvelle valeur diffÃ©rente de l'ancienne alors exÃ©cute le code associÃ©
 
-- la plupart des watch sont crées par des directives
-
+- la plupart des watch sont crÃ©es par des directives
+x
 	ng-model="user.name"  
 
 - ou dans les controleurs
 
 	$scope.$watch('user.name', function(newValue, oldValue))
 
-## Liste des watchs
+[Slides] ## Liste des watchs
 
-- plusieurs parcours complets jusqu'à stabilisation du modèle
+- plusieurs parcours complets jusqu'Ã  stabilisation du modÃ¨le
 
-- plusieurs car déclenchement de code qui impacte d'autres watch
+- plusieurs car dÃ©clenchement de code qui impacte d'autres watch
 
-- l'évaluation de l'expression doit être rapide (indépendament du code qui lui n'est pas exécuté systématiquement)
+- l'Ã©valuation de l'expression doit Ãªtre rapide (indÃ©pendament du code qui lui n'est pas exÃ©cutÃ© systÃ©matiquement)
 
-## exécution d'un traitement suite à un event
+## exÃ©cution d'un traitement suite Ã  un event
 
 - appel de $scope.$apply(fn)
 
-- angular exécute fn
+- angular exÃ©cute fn
 
 - la boucle $digest c'est 
 	- $evalAsync queue : task asynchrone en attente
 	- liste des watches
-	- la boucle $digest se finit lorsque plus aucun watch n'est modifié
+	- la boucle $digest se finit lorsque plus aucun watch n'est modifiÃ©
 
-- il y a un blocage à 10 itérations max dans la boucle digest
+- il y a un blocage Ã  10 itÃ©rations max dans la boucle digest
 
 ## Watch manuel
 
@@ -49,19 +49,19 @@ var removeWatch = $scope.$watch(watchExpression, listener, objectEquality)
 		ou expression (string)
 
 	- objectEquality
-		par défaut à false = ne surveille que la référence des objets
+		par dÃ©faut Ã  false = ne surveille que la rÃ©fÃ©rence des objets
 		true : compare en profondeur des objets et tableaux
 
 - Cette fonction renvoie un watch que l'on peut enlever en faisant : removeWatch();
  
-**Important**: on va faire un watch pour exécuter une opération couteuse, car en le mettant dans une expression parsé sur le markup on risque d'avoir un parsing trop fréquent
+**Important**: on va faire un watch pour exÃ©cuter une opÃ©ration couteuse, car en le mettant dans une expression parsÃ© sur le markup on risque d'avoir un parsing trop frÃ©quent
 
 ## Dirty checking vs change listeners
 
 - avantage dirty checking
-	- fonctionne avec n'importe quels objet , pas besoin de setters pour détecter les modifs
+	- fonctionne avec n'importe quels objet , pas besoin de setters pour dÃ©tecter les modifs
 	- un seul refresh pour tout un ensemble de modifs
-	- pas d'interruption de traitement, les détections sont faites après
+	- pas d'interruption de traitement, les dÃ©tections sont faites aprÃ¨s
 
 - perf
 	- pb si des watches sur des calculs couteux
@@ -69,62 +69,62 @@ var removeWatch = $scope.$watch(watchExpression, listener, objectEquality)
 
 ## Le DOM comme template
 
-- les templates (HTML) sont chargés par le navigateur (et pas angular)
-- quand le DOM est chargé, angular va compiler le template (ng-app) :
-	- détection des directives
-	- traitements associés ; watch, manip du DOM
+- les templates (HTML) sont chargÃ©s par le navigateur (et pas angular)
+- quand le DOM est chargÃ©, angular va compiler le template (ng-app) :
+	- dÃ©tection des directives
+	- traitements associÃ©s ; watch, manip du DOM
 
-- compilation Angular n'est exécutée qu'une seule fois
+- compilation Angular n'est exÃ©cutÃ©e qu'une seule fois
 
 - => il faut que le HTML soit valide car c'est le navigateur qui charge
-- => car angular va compiler le template du DOM et non le HTML fournis en source par le développeur
+- => car angular va compiler le template du DOM et non le HTML fournis en source par le dÃ©veloppeur
 
 ## $apply
 
-	$scope.$apply(expression) // exécuter un traitement déclenché par un event externe 
+	$scope.$apply(expression) // exÃ©cuter un traitement dÃ©clenchÃ© par un event externe 
 
-à ne pas utiliser avec les services ou directives d'angular comme ng-click ou $http car le $apply y est déjà
+Ã  ne pas utiliser avec les services ou directives d'angular comme ng-click ou $http car le $apply y est dÃ©jÃ 
 
-à l'intérieur de la boucle $digest de refresh on ne peut pas appeler $apply
+Ã  l'intÃ©rieur de la boucle $digest de refresh on ne peut pas appeler $apply
 
-au contraire on peut inject $timeout, et appeler $timeout de la fonction JS sans préciser de délai
+au contraire on peut inject $timeout, et appeler $timeout de la fonction JS sans prÃ©ciser de dÃ©lai
 
 
 
 ## les modules (hors du fin du chapitre fonctionnement interne)
 
-- servent à regrouper les services, controlleurs, directives, filtres
+- servent Ã  regrouper les services, controlleurs, directives, filtres
 
-- création d'un module
+- crÃ©ation d'un module
 
 	angular.module('module', [])
 
-- le mettre dans une variable créée une variable globale, pour éviter cela
-	- enchainer sans l'affecter à une variable
+- le mettre dans une variable crÃ©Ã©e une variable globale, pour Ã©viter cela
+	- enchainer sans l'affecter Ã  une variable
 	- le mettre dans un wrapper anonyme (fn())()
 
 ## les modules standards
 
-- ng : toujours dispo, inutile de le mettre en dépendance
-- ngResource : fichier angular-resource à inclure
-- ngSanitize avec son fichier à inclure : sert à épurer du html que l'on veut insérer dans le template (code dangereux)
+- ng : toujours dispo, inutile de le mettre en dÃ©pendance
+- ngResource : fichier angular-resource Ã  inclure
+- ngSanitize avec son fichier Ã  inclure : sert Ã  Ã©purer du html que l'on veut insÃ©rer dans le template (code dangereux)
 - ngTouch : event touch
 - animate, cookies, mock et mockE2E
 
 ## les modules utilisateurs
 
 - recommandation : un fichier par module en dev
-- 2 choses à faire
-	- charger le fichier JS pour le définir en le mettant en dépendance
-	- l'indiquer en dépendance pour qu'il soit actif
+- 2 choses Ã  faire
+	- charger le fichier JS pour le dÃ©finir en le mettant en dÃ©pendance
+	- l'indiquer en dÃ©pendance pour qu'il soit actif
 
 ## le module principale
 
 - ce qui fait qu'il est principale est le fait de le mettre dans ng-app
 
 - on peut faire aussi:
-	angular.bootstrap(document.body, ['app']) // permet d'exécuter du code avant le démarrage de l'application AngularJS
-	// exemple chargement d'une librairie nécessaire avant le chargement de l'app qui s'appuierai sur cette lib
+	angular.bootstrap(document.body, ['app']) // permet d'exÃ©cuter du code avant le dÃ©marrage de l'application AngularJS
+	// exemple chargement d'une librairie nÃ©cessaire avant le chargement de l'app qui s'appuierai sur cette lib
 
 	au lieu de : 
 
@@ -134,18 +134,18 @@ au contraire on peut inject $timeout, et appeler $timeout de la fonction JS sans
 ## .run et .config
 
 - .config : 
-	- on lui passe un callback qui va servir à configurer les services
-	- les services ne sont pas encore créé, on ne peut donc pas lui injecter les services mais le provider des services
+	- on lui passe un callback qui va servir Ã  configurer les services
+	- les services ne sont pas encore crÃ©Ã©, on ne peut donc pas lui injecter les services mais le provider des services
 
 	$httpProvider.defaults.headers.get['My-Header'] = 'value';
 
-	on configure les services avant leur création
+	on configure les services avant leur crÃ©ation
 
 	exemple d'utilisation : config du routage
 
 - .run
-	- faire de la config applicative, après la création de l'injecteur de dépendance
-	- on peut injecter des services, faire des requêtes http ...
+	- faire de la config applicative, aprÃ¨s la crÃ©ation de l'injecteur de dÃ©pendance
+	- on peut injecter des services, faire des requÃªtes http ...
 
 
 # Routage
@@ -157,16 +157,16 @@ utile pour les SPA
 
 routeur de base dans ng-resource
 
-routeur plus évolué : uirouter
+routeur plus Ã©voluÃ© : uirouter
 
 ## $route et ngview
 
-	ngView // affiche le template associé à la route
+	ngView // affiche le template associÃ© Ã  la route
 
 	module.config(function($routeProvider){
 		$routeProvider.when('/Book/:id', {
 			templateUrl: 'book.html' 
-				// ce template est inséré dans la directive <ng-view>, charge le template correspondant à la route courante
+				// ce template est insÃ©rÃ© dans la directive <ng-view>, charge le template correspondant Ã  la route courante
 			,controller: 'bookctrl'   
 			});
 		$routeProvider.otherwise({
@@ -174,25 +174,25 @@ routeur plus évolué : uirouter
 			});
 		});
 
-- **!! ne pas mettre dans book.html le controller bookctrl sinon il est exécuté 2 fois ! **
+- **!! ne pas mettre dans book.html le controller bookctrl sinon il est exÃ©cutÃ© 2 fois ! **
 
-- pour récupérer les param :id, on inject $routeParams dans le controlleur
+- pour rÃ©cupÃ©rer les param :id, on inject $routeParams dans le controlleur
 
 	$routeParams.id
 
 ## $location
 
-- utilisé par $route ($route est basé dessus)
-- accès à 4 data en lecture (route externe):
+- utilisÃ© par $route ($route est basÃ© dessus)
+- accÃ¨s Ã  4 data en lecture (route externe):
 
-	$location.absUrl() // renvoit l'url complète
+	$location.absUrl() // renvoit l'url complÃ¨te
 	protocol() : 'http'
 	host()
 	port()
 
-- 4 données en ecriture (route interne)
+- 4 donnÃ©es en ecriture (route interne)
 	
-	.url() : toute la route interne (après le #)
+	.url() : toute la route interne (aprÃ¨s le #)
 	.path() : path sans param
 	.search() : {"s": "aaa"} // toute les param en JSON
 	.hash()
@@ -201,31 +201,31 @@ routeur plus évolué : uirouter
 
 - si dans le template on veut faire une redirection :
 	
-	href="#/Book/{{book.id}}" // géré par le navigateur , d'ou la nécessité de préciser le #
+	href="#/Book/{{book.id}}" // gÃ©rÃ© par le navigateur , d'ou la nÃ©cessitÃ© de prÃ©ciser le #
 
 - dans un controller / avec du JS
 
 	$location.url() // ecrase search et hash
 
-	$location.path() // n'écrase pas search et hash (pour conserver des params par exemple)
+	$location.path() // n'Ã©crase pas search et hash (pour conserver des params par exemple)
 
 ## modes de gestion des URL
 
 3 modes possibles :
 
-- hashbang : la route est indiqué après le # (défaut d'angular) , seul moyen de rester dans la même page sur les navigateurs non HTML5
+- hashbang : la route est indiquÃ© aprÃ¨s le # (dÃ©faut d'angular) , seul moyen de rester dans la mÃªme page sur les navigateurs non HTML5
 
 - mode HTML5 : param?search#hash
-	utilise le mécanisme d'historique de HTML5
+	utilise le mÃ©canisme d'historique de HTML5
 	permet d'indexer facilement / pour les applis public sans authent
-	la route interne va écraser le chemin de l'appli
+	la route interne va Ã©craser le chemin de l'appli
 
-	pour que ça marche : (on perd la partie path / accès depuis un bookmark avec une route interne et non celui du fichier html)
+	pour que Ã§a marche : (on perd la partie path / accÃ¨s depuis un bookmark avec une route interne et non celui du fichier html)
 		le serveur ne connait
-		=> réécriture d'URL : compliqué si plusieurs appli sur un même serveur/host
-		de même pb si on a des chemins relatifs pour des images, css dans l'url...
+		=> rÃ©Ã©criture d'URL : compliquÃ© si plusieurs appli sur un mÃªme serveur/host
+		de mÃªme pb si on a des chemins relatifs pour des images, css dans l'url...
 
-	fallback : utilise le hashbang si ne browser ne supporte pas le mécanisme d'historique de HTML5
+	fallback : utilise le hashbang si ne browser ne supporte pas le mÃ©canisme d'historique de HTML5
 
 
 - configuration via $locationProvider
@@ -235,30 +235,30 @@ routeur plus évolué : uirouter
 
 	resolve: {key1: fjdkjf, key2: function} // passer une fonction sans ()
 
-- la fonction peut faire une opération asynchrone qui renvoit une promesse : angular va attendre que la promesse soit résolu
+- la fonction peut faire une opÃ©ration asynchrone qui renvoit une promesse : angular va attendre que la promesse soit rÃ©solu
 
-- c'est seulement après qu'il va initialiser le scope et charger le template
+- c'est seulement aprÃ¨s qu'il va initialiser le scope et charger le template
 
 
 ## reloadOnSearch
 
 	reloadOnSearch	
 
-- pas défaut à true
-- utile quand on change les params de search : exemple ajouter les param de recherche dans l'URL de façon à pouvoir faire des backs avec le navigateur (fonctionnement de google sur une recherche)
+- pas dÃ©faut Ã  true
+- utile quand on change les params de search : exemple ajouter les param de recherche dans l'URL de faÃ§on Ã  pouvoir faire des backs avec le navigateur (fonctionnement de google sur une recherche)
 
-- true : ne ré-écrit pas le controleur, ne recharge pas la route, le template...
+- true : ne rÃ©-Ã©crit pas le controleur, ne recharge pas la route, le template...
 
-	** $route.current permet de récupérer tout l'objet définis dans le routeProvider courant et ajouter des propriétés 
+	** $route.current permet de rÃ©cupÃ©rer tout l'objet dÃ©finis dans le routeProvider courant et ajouter des propriÃ©tÃ©s 
 
 # Filtres
 
 
 ## utilisation
 
-	ng-bind="livre in livres | uppercase" // filtre sans paramètre
+	ng-bind="livre in livres | uppercase" // filtre sans paramÃ¨tre
 
-	ng-bind="livre in livres | orderBy:'lastname': false" // filtre avec paramètre
+	ng-bind="livre in livres | orderBy:'lastname': false" // filtre avec paramÃ¨tre
 
 - globale, utilisable de partout dans les expressions des templates
 
@@ -269,7 +269,7 @@ routeur plus évolué : uirouter
 
 	lowercase , uppercase
 
-	date : creationDate | date:'dd/MM/yyyy - HH:mm:ss' // par défaut : date américaine
+	date : creationDate | date:'dd/MM/yyyy - HH:mm:ss' // par dÃ©faut : date amÃ©ricaine
 
 	currency :   // possible de charger un fichier de local : i18n/angular-locale_fr-fr.js
 
@@ -277,29 +277,29 @@ routeur plus évolué : uirouter
 
 	Pour les tableaux : (sur un ng-repeat)
 
-		filter : recherche full-text dans un tableau // passer un {title: 'AngularJS', desc: 'fdds'} pour une recherche spécifique
+		filter : recherche full-text dans un tableau // passer un {title: 'AngularJS', desc: 'fdds'} pour une recherche spÃ©cifique
 
 		limitTo 10 ou -10 (pour les 10 derniers)
 
-		orderBy : trie un tableau, prend une chaine de caractère contenant l'expression Angular
+		orderBy : trie un tableau, prend une chaine de caractÃ¨re contenant l'expression Angular
 
-		json : écrit un objet js en json (debug)
+		json : Ã©crit un objet js en json (debug)
 
 - filtres de ngSanitize
 
 	**linky** : converti les URL et email texte en HTML (liens clickable) 
 
-## Filtre : création
+## Filtre : crÃ©ation
 
-- c'est une fonction JS dont les paramètres sont positionnels : 
+- c'est une fonction JS dont les paramÃ¨tres sont positionnels : 
 	
-	1: entrée du filtre
+	1: entrÃ©e du filtre
 	2: les param suivants sont les param du filtre
 	3: la valeur de retour est la sortie du filtre
 
-- un filtre ne doit pas modifier ce qu'il a en entrée
+- un filtre ne doit pas modifier ce qu'il a en entrÃ©e
 
-- on peut les créer dans un module :
+- on peut les crÃ©er dans un module :
 
 	angular.module('fsdf', [])
 		.filter('filterName', function(){
@@ -329,7 +329,7 @@ routeur plus évolué : uirouter
 	}))
 
 
-## Différence entre filtre et fonction du scope
+## DiffÃ©rence entre filtre et fonction du scope
 
 ### Filtre
 - le filtre est global / disponible dans tous les templates de l'appli
@@ -339,33 +339,33 @@ routeur plus évolué : uirouter
 
 ### Fonction du scope
 
-- non isolée, disponible dans le scope où elle est publiée
+- non isolÃ©e, disponible dans le scope oÃ¹ elle est publiÃ©e
 
 
 # Service
 
-- tout peut etre publié comme un service (primitif, tableau...)
+- tout peut etre publiÃ© comme un service (primitif, tableau...)
 
 - injectable
 
 - singleton
 
-## Injection de dépendances
+## Injection de dÃ©pendances
 
-- angular gère 2 listes:
+- angular gÃ¨re 2 listes:
 	- liste des providers
-	- liste des services déjà instancié
+	- liste des services dÃ©jÃ  instanciÃ©
 
 - si le service existe alors il le renvoit
-- sinon il recherche me provider (nom + Provider), appel $get du provider et ajoute l'objet à la liste des services et le renvoie 
+- sinon il recherche me provider (nom + Provider), appel $get du provider et ajoute l'objet Ã  la liste des services et le renvoie 
 
-- chaque provider doit posséder une fonction $get
+- chaque provider doit possÃ©der une fonction $get
 
 ##Publication d'un service
 
 - toujours sur un module
 
-- 5 méthodes, toute renvoient le module :
+- 5 mÃ©thodes, toute renvoient le module :
 
 	constant 	//
 	value 		//
@@ -373,40 +373,40 @@ routeur plus évolué : uirouter
 	service 	// 
 	provider 	// 
 
-### Provider : le plus général / permet de tout faire
+### Provider : le plus gÃ©nÃ©ral / permet de tout faire
 
 	module.provider(nom_service, object | function) 
 		
-	// objet provider ou bien une function appelée par angular, et son résultat est catalogué comme provider, doit travailler sur this
+	// objet provider ou bien une function appelÃ©e par angular, et son rÃ©sultat est cataloguÃ© comme provider, doit travailler sur this
 
-	elle doit définir une méthode $get
+	elle doit dÃ©finir une mÃ©thode $get
 
 	function MyServiceProvide(){
 		this.$get = function($http, $location...){
 			// doit renvoyer le service 
 		}
 
-		//  si on a besoin que de la méthode $get alors inutile de créer un provider
+		//  si on a besoin que de la mÃ©thode $get alors inutile de crÃ©er un provider
 	}
 
 	dans module.config on ne peut passer que des provider mais pas de services
 
 ### Factory
 
-si le provider n'a qu'une méthode $get alors la factory est suffisante
+si le provider n'a qu'une mÃ©thode $get alors la factory est suffisante
 
-	module.factory(string, function) // function est une méthode $get
+	module.factory(string, function) // function est une mÃ©thode $get
 
 ### Service
 
-	module.service('nom', fn) // fn est un constructeur , il va y a voir un (new fn) utilisé par la méthode $get pour instancier le service 
+	module.service('nom', fn) // fn est un constructeur , il va y a voir un (new fn) utilisÃ© par la mÃ©thode $get pour instancier le service 
 
 il travail sur this, lui ajoute ce qu'il veut mais ne renvoit rien 
 
 
 ### value
 
-- si le service est un objet prééexistant
+- si le service est un objet prÃ©Ã©existant
 
 	module.value('nom', service_existant)
 
@@ -414,11 +414,11 @@ il travail sur this, lui ajoute ce qu'il veut mais ne renvoit rien
 
 ### constant
 
-- il est publié dans la liste des service et dans la liste des providers
+- il est publiÃ© dans la liste des service et dans la liste des providers
 
 - il n'a pas de $get
 
-- ** comme il est publié, on peut y accéder dans la méthode config du module, l'injecter sans le suffixe provider ** (pas très courant)
+- ** comme il est publiÃ©, on peut y accÃ©der dans la mÃ©thode config du module, l'injecter sans le suffixe provider ** (pas trÃ¨s courant)
 
 
 ## service $provide
@@ -427,7 +427,7 @@ il travail sur this, lui ajoute ce qu'il veut mais ne renvoit rien
 
 ## Pb Minification
 
-- les params sont renommés en minification
+- les params sont renommÃ©s en minification
 
 - les solutions :
 
@@ -436,9 +436,9 @@ il travail sur this, lui ajoute ce qu'il veut mais ne renvoit rien
 
 	function release(a, b)
 
-	release.$inject = ['a', 'b']; // on lui dit les paramètres à injecter
+	release.$inject = ['a', 'b']; // on lui dit les paramÃ¨tres Ã  injecter
 
-inconvénient : pas d'inline
+inconvÃ©nient : pas d'inline
 
 ### 2
  
@@ -450,25 +450,25 @@ inconvénient : pas d'inline
 
 - utilisation de ngmin
 
-	- créé le tableau
+	- crÃ©Ã© le tableau
 	- en ligne de commande ou grunt
 	- ne minifie pas
 
 ## Service $injector
 
-### il a 2 méthodes
+### il a 2 mÃ©thodes
 
 	$injector.get('srv_name') // renvoit le service
 	$injector.invoke(fn)
 
 	$injector.invoke(['service', function(service){}]);
 
-### Utilité
+### UtilitÃ©
 
 - si on veut construire le nom du service dynamiquement
-- si l'instanciation est couteuse, et que le service n'est pas utilisé systématiquement
-- si dépendances circulaires entre les services
-	utilisé pour retirer des dépendances afin que l'instanciation soit possible
+- si l'instanciation est couteuse, et que le service n'est pas utilisÃ© systÃ©matiquement
+- si dÃ©pendances circulaires entre les services
+	utilisÃ© pour retirer des dÃ©pendances afin que l'instanciation soit possible
 
 ## TU
 
@@ -477,5 +477,5 @@ it(... , inject(function(serviceBlabla){
 	expect(serviceBlabla).equals...
 }))
 
-si le service utilise d'autres services alors lui créé des objets factices (spy de jasmine)
+si le service utilise d'autres services alors lui crÃ©Ã© des objets factices (spy de jasmine)
 

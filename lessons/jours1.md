@@ -1,146 +1,205 @@
 
 # Jours 1 : Javascript 
 =============================================================
-## 1 / Types primitifs : 
+## Les types primitifs 
 
 - Undefined : aucune valeur
 - Null : explicitement null
 - Il n’y a qu’un seul type  numérique : number
 - Pas de type caractère
 
-0.1 + 0.2 == 0.3 => false
+	0.1 + 0.2 == 0.3 // false
 
 ajout de nombre à 2 décimales ne fait pas forcément un nombre à 2 décimales
 
-ils sont immuables : 
+### Ils sont immuables : 
 
 	var a = 123; var b=a; //  affecte la valeur directement et non l'adresse
 
-ils sont convertis en objet lorsque c'est nécessaire (uniquement le temps de l'utilisation, l'objet est perdu / non stocké / auto boxing ):
+### Auto boxing
+
+Ils sont convertis en objet lorsque c'est nécessaire 
+- uniquement le temps de l'utilisation, l'objet est perdu / non stocké:
 
 	var n=5; n.toString();
 
-		
-== : comparaison avec conversion automatique de types / fonctionne bien sur les types primitifs et non sur les objets
-donc éviter de faire des var f = new String("fdsfs");	
+### =, ==, ===
 
-1 == true; // true car il converti le true en nombre donc 1
-"true" == true ; // false
-new Number(1) == new number(1) // false
+#### == 
 
-si un des deux opérandes est une chaine alors il essaie de convertir tout en chaine
-sinon compare les références des objets
+- Comparaison avec conversion automatique de types
+- Fonctionne bien sur les types primitifs
+- Ne fonctionne pas sur les objets
 
-=== : comparaison strict : sans conversion automatique
-true : types primitifs égaux en valeur, ou bien 2 opérandes égales en adresse
-sinon false
+donc éviter de faire des 
+
+	var f = new String("fdsfs");	
+
+Exemples :
+
+	1 == true; 						// true car il converti le true en nombre donc 1
+	"true" == true ; 				// false
+	new Number(1) == new Number(1) 	// false
+
+- Si un des deux opérandes est une chaine alors il essaie de convertir tout en chaine
+- Sinon compare les références des objets
+
+#### ===
+
+Comparaison strict : sans conversion automatique
+
+Renvoie true si 
+- ce sont des types primitifs égaux en valeur,
+- ou bien 2 opérandes égales en adresse
+
+Sinon false
 
 
-## 2 / Les objets
+## Les objets
 
-- sont des tableaux de clefs/valeurs
-clef : chaine de caractères
+- Ce sont des tableaux de clefs/valeurs avec :
 
-on peut faire : obj.clef (notation simplifié autorisé s'il n'y pas de carac non autorisés) ou object['clef']
+	clef // chaine de caractères
 
-obj['a.b'] mieux que obj.a.b
+- On peut faire
 
-supprimer une propriété :
-var a = {p1 : 1, p2: 2};
-a.p2 = undefined;
-a // Object {p1: 1; p2: undefined}
+	obj.clef // notation simplifié autorisé s'il n'y pas de carac non autorisés ou bien :
+	object['clef']  
 
-faire plutot :
-delete params[keys]; => Object {p1: 1;}
+	obj['a.b'] // mieux que obj.a.b
 
-## 3/ Les tableaux
+- Supprimer une propriété :
 
-a['01'] = 8 
-Object.keys(a) // on va avoir la clé
-mais si on fait : a // alors on n'aura pas la valeur
+	var a = {p1 : 1, p2: 2};
+	a.p2 = undefined;
+	a 							// Object {p1: 1; p2: undefined}
+
+- Faire plutot :
+
+	delete params[keys]; => Object {p1: 1;}
+
+## Les tableaux
+
+	a['01'] = 8 
+	Object.keys(a) 	// on va avoir la clé
+
+- Mais si on fait
+	
+	a['01']			// alors on n'aura pas la valeur
+
 car 01 n'est pas considéré comme un entier 
 
-a.length = 0 pour vider un tableau // vide tout le tableau sauf les index non numériques
+	a.length = 0  // pour vider un tableau : vide tout le tableau sauf les index non numériques
 
-length : propriété toujours supérieur au plus grand des index
+- length : propriété toujours supérieur au plus grand des index
 
-array.push ajoute à la fin d'un tableau / pop enlève et renvoie le dernier éléments du tab / shift : enlève le premier élément et décrémente
+	array.push  // ajoute à la fin d'un tableau
+	unshift		// pour insérer au début du tableau
 
-pour insérer au début du tableau : unshift
-splice : ajout ou supprimer à un certain index
-reverse, sort
+	shift		// enlève le premier élément et décrémente
+	pop         // enlève et renvoie le dernier éléments du tableau
+
+	splice 		// ajoute ou supprime à un certain index
+	
+	reverse
+	sort
+
+Exemple :
 
 	$scope.articles.splice(index, 1); // supprime 1 seul élément à l'index 
 
-concat et slice créé des nouveaux tableaux
+- concat et slice créé des nouveaux tableaux
 
-a.concat (b) : ne modifie pas a mais créé un nouveau tableau
+	a.concat(b) // ne modifie pas a mais créé un nouveau tableau
 
-slice renvoit une copie
-
-
-fonctions ECMAScript5 : indexOf, lastIndexOf, forEach 
--every et some : on passe un callback qui renvoit un boolean
--every : vrai si le callback dit vrai pour tous les éléments
--some pour some éléments
--filter renvoit un nouveau tableau avec les éléments qui passe true dans le callback
-- map : sert un calculer un tableau de valeurs
-- reduce : un seul élément : exemple : somme des éléments d'un tableau
+- slice renvoit une copie
 
 
-## les fonctions - Définition
+### Fonctions ECMAScript5 : indexOf, lastIndexOf, forEach
 
-2 façons de définir :
+- every et some : on passe un callback qui renvoit un boolean
+- every : vrai si le callback dit vrai pour tous les éléments
+- some : pour some éléments
+- filter renvoit un nouveau tableau avec les éléments qui passe true dans le callback
+- map : sert à calculer un tableau de valeurs
+- reduce : un seul élément (ex : somme des éléments d'un tableau)
+
+
+## Les fonctions - Définition
+
+### 2 façons de les définir :
 	
-	function fn1(toto){} // ne renvoit pas de valeurs + nom obligatoire
+	function fn1(toto){} 		// ne renvoit pas de valeurs et le nom obligatoire
 
-	return function fn(toto) // nom non obligatoire sauf si récursif +  créé un objet function et le renvoit
+	return function fn(toto) 	// le nom est facultatif sauf si récursif + créé un objet function et le renvoit
 
 différence entre
-function f1()
+	
+	function f1()
 
-et var f2 = function()
+et 
+
+	var f2 = function()
 
 f1 est exécuté au premier passage de JS, f2 uniquement lorsqu'elle est appelé
 
 
-## les fonctions - les appels
+## Les fonctions - appels de fonctions
 
-###1
+### 1 - Appel direct
+
 	data = transform(a,b,c);
 
-"arguments" pseudo tableau, pas de type array, mais possède un index numérique et une longeur
-arguments[0]
-arguments.length
+- "arguments" pseudo tableau
+- pas de type array, mais possède un index numérique et une longeur
+	
+	arguments[0]
+	arguments.length
 
-this = undefined en mode strict
-sinon objet global en mode normal
+### Tips sur this
 
-### 2
-ou bien
+	this // undefined en mode strict
 
-	a.push(value) //ou a['push'](value)
+sinon objet global en mode normal (window)
+
+### 2 - Appel d'une fonction propriété d'un objet
+
+	a.push(value) // ou a['push'](value)
 
 
-### 3 fonction appelé comme constructeur
+### 3 - Fonctions appelés comme constructeur
 
 	var obj = new Fn(arg);
 
-JS créé un nouvel objet dont le prototype est Fn.prototype (prototype est une propriété créé automatiquement
-sur toutes les fonctions)
+JS créé un nouvel objet dont le prototype est Fn.prototype 
 
-Fn.prototype est le prototype des instances et non de la fonction (dont le prototype est function.prototype)
+### Tips sur les prototypes
 
+** prototype est une propriété créée automatiquement sur toutes les fonctions ** 
+
+- Fn.prototype est le prototype des instances et non de la fonction
+- Le prototype des functions est function.prototype !
 
 	obj.constructor === Fn
 
-	obj instanceof Fn
+	obj instanceof Fn // true
 
-Ajout de fonctions au prototype : 
+- Ajout de fonctions au prototype : 
 
 	Fn.prototype.functionName = function(arg){}
 
-Permet d'affecter cette fonctions à toutes les instances
+- Permet d'affecter cette fonctions à toutes les instances
+
+- Exemple :
+
+	var Gateau = function(ingredients){
+		this.ingredients = ingredients;
+	}
+
+	var madelaine = new Gateau("lait et oeufs");
+
+	console.log(madelaine.ingredients);
+
 
 ### 4
 

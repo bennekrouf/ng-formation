@@ -3,17 +3,35 @@
 var app = angular.module('app', []);
 
 app.controller('Ctrl', function($scope) {
+
+    var zoom = 10;
+
     $scope.maps = [
-        { center: {lat: 43.6, lng: 4}, zoom: 10 },
-        { center: {lat: 42, lng: 9}, zoom: 8 },
+        { center: {lat: 43.6, lng: 4}, zoom: zoom }
+        //,{ center: {lat: 43.6, lng: 4}, zoom: zoom +2 }
+        //,{ center: {lat: 42, lng: 9}, zoom: 8 }
     ];
 });
 
 app.directive('gmaps', function factory($timeout) {
     return {
         restrict: 'EA',
-        templateUrl: 'gmaps.html',
-        replace: true,
+//        templateUrl: 'gmaps.html',
+
+        template: '<div>' 
+                    +'<div class="gmaps"></div>'
+                    +'<form role="form">'
+                    +'    <input type="text" name="" id="input" class="form-control" ng-model="label">'
+                    +'    <button type="submit" class="btn btn-primary" ng-click="snap(snapshot)" >Snap</button>'
+                    +'</form>'
+                    +'<div>'
+                    +'    <button ng-repeat="snapshot in snapshots"' 
+                    +'                type="button" class="btn btn-default btn-lg" ng-click="selectSnapshot(snapshot)">'
+                    +'                {{snapshot.label}}'
+                    +'    </button>'
+                    +'</div>'
+                    +'</div>' 
+        ,replace: true,
         scope: {
             center: '=',
             zoom: '='
@@ -69,7 +87,6 @@ app.directive('gmaps', function factory($timeout) {
                     scope.center.lng = center.lng();
                 });
             });
-
         }
     };
 });
