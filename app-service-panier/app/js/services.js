@@ -44,19 +44,19 @@ angular.module('services', [])
 		}
 
 		,populePanier : function(article){
-			var row = this.panier[article.ISBN13];
+			var row = this.panier[article['ISBN-13']];
 			if(row){
 				row.qtt++;
 				return;
 			}
 			else {
 				var newItem = {
-					id: article.ISBN13
+					id: article['ISBN-13']
 					,qtt: 1
 					,price: article.price
 					,title: article.title
 				};
-				this.panier[article.ISBN13] = newItem;
+				this.panier[article['ISBN-13']] = newItem;
 			}
 			return this.panier;
 		}

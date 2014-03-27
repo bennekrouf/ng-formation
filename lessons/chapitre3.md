@@ -1,24 +1,37 @@
 
-# Chapitre 3 : Fonctionnement interne 
+# Chapitre 3 : Fonctionnement interne, les modules, le Routage
 =============================================================
 
+Ce chapitre traite les thèmes:
+- Rafraichissement des vues
+- Cycles $digest
+- Watch
+- Dirty checking vs change listeners
+- Le DOM comme template
+- $apply
 
+- Les modules
+- module.run et module.config
+- Routage
+- $route et ngview
+- $routeParams
+- $location
+- Liens et redirection
 
-
-## Rafraichissement des vues
+### Rafraichissement des vues
 
 - dirty checking:
 	- parcours une série de watch : si nouvelle valeur différente de l'ancienne alors exécute le code associé
 
 - la plupart des watch sont crées par des directives
-x
+
 	ng-model="user.name"  
 
 - ou dans les controleurs
 
 	$scope.$watch('user.name', function(newValue, oldValue))
 
-[Slides] ## Liste des watchs
+[Slides] ### Liste des watchs
 
 - plusieurs parcours complets jusqu'à stabilisation du modèle
 
@@ -26,11 +39,14 @@ x
 
 - l'évaluation de l'expression doit être rapide (indépendament du code qui lui n'est pas exécuté systématiquement)
 
-## exécution d'un traitement suite à un event
 
-- appel de $scope.$apply(fn)
+### Exécution d'un traitement suite à un event
 
-- angular exécute fn
+- appel de 
+
+	
+	$scope.$apply(fn)  // angular exécute fn
+
 
 - la boucle $digest c'est 
 	- $evalAsync queue : task asynchrone en attente
@@ -39,26 +55,27 @@ x
 
 - il y a un blocage à 10 itérations max dans la boucle digest
 
-## Watch manuel
+### Watch manuel
 
-var removeWatch = $scope.$watch(watchExpression, listener, objectEquality)
 
-	-watchExpression
-		string ou function
+	var removeWatch = $scope.$watch(watchExpression, listener, objectEquality)
 
-	- listener
-		function(new, old, scope)
-		ou expression (string)
 
-	- objectEquality
+`watchExpression` : string ou function
+
+listener` function(new, old, scope) ou expression (string)
+
+`objectEquality`
+
 		par défaut à false = ne surveille que la référence des objets
 		true : compare en profondeur des objets et tableaux
 
+
 - Cette fonction renvoie un watch que l'on peut enlever en faisant : removeWatch();
  
-**Important**: on va faire un watch pour exécuter une opération couteuse, car en le mettant dans une expression parsé sur le markup on risque d'avoir un parsing trop fréquent
+**Important : Quand faire un watch ?**: on va faire un watch pour exécuter une opération couteuse, car en le mettant dans une expression parsé sur le markup on risque d'avoir un parsing trop fréquent
 
-## Dirty checking vs change listeners
+### Dirty checking vs change listeners
 
 - avantage dirty checking
 	- fonctionne avec n'importe quels objet , pas besoin de setters pour détecter les modifs
@@ -69,7 +86,7 @@ var removeWatch = $scope.$watch(watchExpression, listener, objectEquality)
 	- pb si des watches sur des calculs couteux
 	- 2000 watches simples supportables
 
-## Le DOM comme template
+### Le DOM comme template
 
 - les templates (HTML) sont chargés par le navigateur (et pas angular)
 - quand le DOM est chargé, angular va compiler le template (ng-app) :
@@ -81,19 +98,21 @@ var removeWatch = $scope.$watch(watchExpression, listener, objectEquality)
 - => il faut que le HTML soit valide car c'est le navigateur qui charge
 - => car angular va compiler le template du DOM et non le HTML fournis en source par le développeur
 
-## $apply
-
-	$scope.$apply(expression) // exécuter un traitement déclenché par un event externe 
-
-à ne pas utiliser avec les services ou directives d'angular comme ng-click ou $http car le $apply y est déjà
-
-à l'intérieur de la boucle $digest de refresh on ne peut pas appeler $apply
-
-au contraire on peut inject $timeout, et appeler $timeout de la fonction JS sans préciser de délai
+### $apply
 
 
+	$scope.$apply(expression) // Permet d'exécuter un traitement déclenché par un event externe 
 
-## les modules (hors du fin du chapitre fonctionnement interne)
+
+- A ne pas utiliser avec les services ou directives d'angular comme ng-click ou $http car le $apply y est déjà
+
+- A l'intérieur de la boucle $digest de refresh on ne peut pas appeler $apply
+
+- Au contraire on peut inject $timeout, et appeler $timeout de la fonction JS sans préciser de délai
+
+
+
+## Les modules
 
 - servent à regrouper les services, controlleurs, directives, filtres
 
@@ -101,7 +120,9 @@ au contraire on peut inject $timeout, et appeler $timeout de la fonction JS sans
 
 	angular.module('module', [])
 
-- le mettre dans une variable créée une variable globale, pour éviter cela
+- le mettre dans une variable créée une variable globale
+
+- pour éviter cela : 
 	- enchainer sans l'affecter à une variable
 	- le mettre dans un wrapper anonyme (fn())()
 
@@ -122,10 +143,13 @@ au contraire on peut inject $timeout, et appeler $timeout de la fonction JS sans
 
 ## le module principale
 
-- ce qui fait qu'il est principale est le fait de le mettre dans ng-app
+- ce qui fait qu'il est principal est le fait de le mettre dans ng-app
 
 - on peut faire aussi:
-	angular.bootstrap(document.body, ['app']) // permet d'exécuter du code avant le démarrage de l'application AngularJS
+
+	angular.bootstrap(document.body, ['app']) 
+
+	// permet d'exécuter du code avant le démarrage de l'application AngularJS
 	// exemple chargement d'une librairie nécessaire avant le chargement de l'app qui s'appuierai sur cette lib
 
 	au lieu de : 
@@ -141,7 +165,7 @@ au contraire on peut inject $timeout, et appeler $timeout de la fonction JS sans
 
 	$httpProvider.defaults.headers.get['My-Header'] = 'value';
 
-	on configure les services avant leur création
+on configure les services avant leur création
 
 	exemple d'utilisation : config du routage
 
@@ -176,7 +200,7 @@ routeur plus évolué : uirouter
 			});
 		});
 
-- **!! ne pas mettre dans book.html le controller bookctrl sinon il est exécuté 2 fois ! **
+**!! Ne pas mettre dans book.html le controller bookctrl sinon il est exécuté 2 fois !! **
 
 - pour récupérer les param :id, on inject $routeParams dans le controlleur
 
@@ -188,7 +212,7 @@ routeur plus évolué : uirouter
 - accès à 4 data en lecture (route externe):
 
 	$location.absUrl() // renvoit l'url complète
-	protocol() : 'http'
+	protocol() // 'http'
 	host()
 	port()
 
@@ -199,7 +223,7 @@ routeur plus évolué : uirouter
 	.search() : {"s": "aaa"} // toute les param en JSON
 	.hash()
 
-## liens et redirection
+## Liens et redirection
 
 - si dans le template on veut faire une redirection :
 	

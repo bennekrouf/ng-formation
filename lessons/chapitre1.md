@@ -2,19 +2,18 @@
 # Javascript : 
 =============================================================
 
-
 Dans ce chapitre sont traités :
-- les types primitifs
-- les objets
-- les tableaux
-- les fonctions
-- les Operandes && et ||
-- les exceptions
+- Types primitifs
+- Objets
+- Tableaux
+- Fonctions
+- Closures
+- Operandes && et ||
+- Exceptions
 
 et enfin :
 
 - Introduction à Angular
-
 
 
 
@@ -209,6 +208,7 @@ JS créé un nouvel objet dont le prototype est Fn.prototype
 
 - Exemple :
 
+
 	var Gateau = function(ingredients){
 		this.ingredients = ingredients;
 	}
@@ -244,6 +244,7 @@ fonctions anonymes exécutées directement pour isoler un scope
 
 ### 6 Pattern module
 
+
 	var module = (function(){
 		
 		var priv;
@@ -258,13 +259,86 @@ fonctions anonymes exécutées directement pour isoler un scope
 	})();
 
 
-## Chaine des prototypes
+## Prototypes
+
+- Framework JS 
+
+
+	Objet.prototype // représente l'objet prototype de Object (père de tous les objets js)
+
+
+### New et this sont sur un bateau
+
+- Toutes les fonctions JS sont des objets
+- Toutes les fonctions JS peuvent être utilisés pour créer des objets
+
+
+	function createPerson(firstname, lastname, age) {
+	    person = {};
+	    person.firstname = firstname;
+	    person.lastname = lastname;
+	    person.age = age;
+	    return person;
+	}
+	createPerson("Moe", "Ben", 36);
+	// {firstname: "Moe", lastname: "Ben", age: 36}
+
+
+- Remarque : "createPerson()" et "new createPerson" vont faire la même chose (renvoit de l'objet person)
+
+- En revanche, pour créer des nouveaux objets d'un type particulier, on utilise new :
+
+
+	function createPersonObject(firstname, lastname, age) {
+	    this.firstname = firstname;
+	    this.lastname = lastname;
+	    this.age = age;
+	    // pas de return
+	}
+
+
+- createPersonObject() : va définir les attributs de this sur l'objet courant de this (window sur un browser)
+
+- new createPersonObject() : va instancier l'objet
+
+
+	var Moe = createPersonObject("Moe", "Ben", 36);
+	console.log(Moe); // undefined
+	console.log(window.firstname) // "Moe" (oops)
+
+	var Sam = new createPersonObject("Sam", "Dek", 45);
+	console.log(Sam); // {firstname: "Sam", lastname: "Dek", age: 45}
+
+
+### Intérêt des prototypes
+
+- En faisant new o_b_j_e_c_t avec la manipulation de this, on ajoute une référence à la propriété "prototype" à chaque instance
+
+- Ainsi, cela permet de définir des méthodes qui sont visibles sur chacune des instances :
+
+
+	createPersonObject.prototype.fullName = "Nan";
+	createPersonObject.prototype.greet = function(){ 
+	    console.log("Salut! Je suis ", this.fullName, "Appelez moi ", this.firstname); 
+	};
+	Moe.fullName // "Nan"
+	Moe.fullName = "Moe Ben"; 
+	createPersonObject.fullName // Still "Nan"
+	Moe.greet(); // "Salut! Je suis Moe Ben Appelez moi Moe"
+
+
+- Convention : les fonctions du type createPersonObject sont "capitalized, singulières, nommées"
+
+
+
+### Chaine des prototypes
 
 get : recherche dans le courant puis le prototype père...etc d'une propriété
 set : ne modifie que l'objet courant
 
 
 accéder au prototype d'un objet:
+
 	
 	Object.getPrototypeOf(obj)
 
@@ -273,17 +347,18 @@ ou
 	obj.__proto__ // syntaxe non recommandé
 
 
-## Héritage par prototype
+### Héritage par prototype
+
 
 	function Parent() {
 
-	 this.level = 'parent';
+		this.level = 'parent';
 
 	 }
 
 	 function Child() {
 
-	 this.level = 'child';
+		this.level = 'child';
 
 	 }
 
@@ -296,7 +371,57 @@ ou
 	 var ch2 = new Child();
 
 
-Rarement utile
+** Rarement utile !! **
+
+
+## Closures
+
+- une closure est une inner fonction qui a accès aux variables de son outer function
+
+
+	function showName (firstName, lastName) {
+	var nameIntro = "Your name is ";
+	    // this inner function has access to the outer function's variables, including the parameter
+	function makeFullName () {      
+	return nameIntro + firstName + " " + lastName;   
+	}
+
+	return makeFullName ();
+	}
+
+	showName ("Michael", "Jackson"); // Your name is Michael Jackson
+
+
+- Pour créer une closure : on créer une fonction à l'intérieur d'une autre fonction
+
+
+### Impacts d'une closure
+
+
+#### Accès à l'outer function même après le return de l'outer function
+
+	function celebrityName (firstName) {
+	    var nameIntro = "This celebrity is ";
+	    // this inner function has access to the outer function's variables, including the parameter
+
+	   function lastName (theLastName) {
+	        return nameIntro + firstName + " " + theLastName;
+	    }
+
+	    return lastName;
+	}
+
+	var mjName = celebrityName ("Michael"); 
+	// At this juncture, the celebrityName outer function has returned.
+
+	mjName ("Jackson"); // This celebrity is Michael Jackson
+
+#### Les closures stockent des références des variables de l'outer function
+
+
+#### Source de bug : modification des variables de l'outer function
+
+
 
 
 
@@ -424,10 +549,12 @@ Constructeur prédéfini:
 - Ajax pour générer de nouveaux une partie de la vue
 - ou manipulations du DOM
 
+
 ## Two way data binding
 - ne recoit que des fichiers statiques qui va etre compilé en vue dynamique qui se rafraichit automatiquement
 - toutes les modifications se font sur le modèle
 - l'application ne manipule jamais la vue (on ne touche pas au DOM)
+
 
 ## Logique et Vues
 - séparation de la logique et des vues
@@ -453,18 +580,3 @@ Constructeur prédéfini:
 - contexte d'exécution des expressions de la vue
 - héritage par prototype entre le scope parent et enfant
 - certaines directives créent un nouveau scope
-
-
-## Quelques directives
-
-
-
-
-
-
-
-
-
-
-
-

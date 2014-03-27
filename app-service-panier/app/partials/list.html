@@ -1,8 +1,8 @@
 
-
+<div style="height : 300px ;overflow:auto ">
 <div class="row" style="">
 
-      <div class="col-md-8" style="margin: 15px 0 0;">
+      <div class="col-md-6" style="margin: 15px 0 0;">
           <div class="panel panel-default">
                 <div class="panel-heading">
                       <h3 class="panel-title">Filtres</h3>
@@ -10,31 +10,33 @@
                 <div class="panel-body">
                 <fieldset>
 
-                <div class='col-md-3'>
-            Recherche: <input type="search" class="form-control" ng-model="search.title"> 
-                      {{(livres | filter: search.title).length}}
-                </div>
-                <div class='col-md-3'>
-            Prix Min: <input type="number" class="form-control" ng-model="prix.min">
-                </div>
-                <div class='col-md-3'>
-            Prix Max: <input type="number" class="form-control" ng-model="prix.max">
-                </div>
-                <div class='col-md-3'>
-                Selection: <select class="form-control" ng-model="selection" 
-                          ng-options="critere as critere.libelle for critere in criteres">
-                  </select>
-                </div>
+                  <div class='col-md-3'>
+              Recherche: <input type="search" class="form-control" ng-model="search.title"> 
+                  </div>
+                  <div class='col-md-3'>
+              Prix Min: <input type="number" class="form-control" ng-model="prix.min">
+                  </div>
+                  <div class='col-md-3'>
+              Prix Max: <input type="number" class="form-control" ng-model="prix.max">
+                  </div>
+                  <div class='col-md-3'>
+                  Selection: <select class="form-control" ng-model="selection" 
+                            ng-options="critere as critere.libelle for critere in criteres">
+                    </select>
+                  </div>
                 </fieldset>
                 </div>
           </div>
 
       </div>
 
-      <div class="col-md-4" style="margin: 15px 0 0;">
+      <div class="col-md-6" style="margin: 15px 0 0;">
           <div ng-include="'partials/stats.html'"></div>
       </div>
 </div>
+
+</div>
+
 
 
 

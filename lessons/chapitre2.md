@@ -340,21 +340,23 @@ idem pour expect
 
 ### Exemple pour une liste d'éléments
 
-	it('should return a group of elements for a column'
 
-	 var nameColumn = element.all(by.repeater('bloop in days').column('name'));
+	it('should return a group of elements for a column', function(){
 
-	 nameColumn.then(function(arr) {
+		 var nameColumn = element.all(by.repeater('bloop in days').column('name'));
 
-	 expect(arr.length).toEqual(5);
+		 nameColumn.then(function(arr) {
 
-	 expect(arr[0].getText()).toEqual('Monday');
+		 expect(arr.length).toEqual(5);
 
-	 expect(arr[1].getText()).toEqual('Tuesday');
+		 expect(arr[0].getText()).toEqual('Monday');
+
+		 expect(arr[1].getText()).toEqual('Tuesday');
 
 	 });
 
-	});
+
+
 
 ###
 

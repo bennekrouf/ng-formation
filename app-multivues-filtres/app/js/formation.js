@@ -54,17 +54,17 @@ angular.module('formationApp.controller', [])
 	$scope.livre = {};
 	$http.get(URL+'/'+$routeParams.id+KEY).success(function(item){
 
-				$rootScope.title = item.title;
+		$rootScope.title = item.title;
 
-				$scope.livre.ISBN10 = item['ISBN-10'];
-				$scope.livre.ISBN13 = item['ISBN-13'];
-				$scope.livre.title = item.title;
-				$scope.livre.publisher = item.publisher;		
-				$scope.livre.author = item.author;		
-				$scope.livre.rating = item.rating;		
-				$scope.livre.price = item.price;		
-				$scope.livre.desc = item.desc;		
-				$scope.livre.pages = item.pages;		
-				$scope.livre.image = item.img;	
+		$scope.livre.ISBN10 = item['ISBN-10'];
+		$scope.livre.ISBN13 = item['ISBN-13'];
+		$scope.livre.title = item.title;
+		$scope.livre.publisher = item.publisher;		
+		$scope.livre.author = item.author;		
+		$scope.livre.rating = item.rating;		
+		$scope.livre.price = item.price;		
+		$scope.livre.desc = item.desc;		
+		$scope.livre.pages = item.pages;		
+		$scope.livre.image = item.img;	
 	});
 });

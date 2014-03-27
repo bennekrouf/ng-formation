@@ -1,7 +1,7 @@
 # Chapitre 5 : event, directives, best practices, animations
 =============================================================
 
-## ecouter un event
+## Ecouter un event
 
 
 	$scope.$on(name, listener)
