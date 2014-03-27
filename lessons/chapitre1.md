@@ -1,5 +1,5 @@
 
-# Javascript : 
+# Chapitre 1 : Javascript revisité 
 =============================================================
 
 Dans ce chapitre sont traités :

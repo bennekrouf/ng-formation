@@ -21,7 +21,7 @@ L'objet event contient les properties :
 	targetScope : scope sur lequel a été déclenché l'event
 	currentScope : le scope sur lequel est intercepté l'event
 
-## event Angular en std
+## event fournis par le framework en natif
 
 ###Scopes
 
@@ -89,7 +89,7 @@ L'objet event contient les properties :
 - Directives détectées dans 
 	
 	[E] : <my-dir></my-dir>
-	[A]	: <span my-dir
+	[A]	: <span my-dir></span>
 	[C] : <span class="my-dir: exp;"
 	[M] : <!-- directive: my-dir exp -->
 
@@ -99,20 +99,20 @@ L'objet event contient les properties :
 
 - Ensuite Angular va compile en 2 phases
 	
-	### compile : exécute un service $compile (qui est une fonction que l'on peut exécuter)
-		- il va détecter les directives : il va convertir les noms des elements et artttibuts sans camel case puis regarder s'il y a une directive, 
-		- puis va traiter par priorité les directives d'un même élément
-		- puis exécute les fonctions compile des directives 
-		- La fonction compile peut modifier le DOM mais n'a pas accès au scope
-		- elle peut renvoyer 2 fonctions : prelink ou postlink
-		- les fonctions link servent à faire le lien entre le DOM et le scope
+### Phase `compile` : exécute un service $compile (qui est une fonction que l'on peut exécuter)
 
-		- compile n'est fait qu'une seule fois sur le template avant répétition
-		, à la différence de link qui va étre fait sur chaque élément 
+- il va détecter les directives : il va convertir les noms des éléments et attributs sans camel case puis regarder s'il y a une directive, 
+- puis va traiter par priorité les directives d'un même élément
+- puis exécute les fonctions compile des directives 
+- La fonction compile peut modifier le DOM mais n'a pas accès au scope
+- elle peut renvoyer 2 fonctions : prelink ou postlink
+- les fonctions link servent à faire le lien entre le DOM et le scope
 
-	### link : watches sur le scope + ... (voir slides)
+- compile n'est fait qu'une seule fois sur le template avant répétition, à la différence de link qui va étre fait sur chaque élément
 
-		- paramètres positionnels
+### Phase `link` : watches sur le scope + ... (voir slides)
+
+- paramètres positionnels
 
 		<span my-bind="user.name" // my-bind joue 2 rôles : déclenche la directive et permet de stocker l'élément
 
@@ -162,7 +162,7 @@ L'objet event contient les properties :
 ### compile(element, attrs)
 
 - elle peut renvoyer une fonction link
-- elle peut return 2 objets
+- elle peut faire un return de 2 objets
 
 	return {
 		pre: function preLink(scope, element, attrs)
@@ -178,7 +178,7 @@ L'objet event contient les properties :
 
 - utilise jqlite si jquery n'est pas chargé
 - jqlite est plus restreint (pas de sélecteurs CSS)
-- contient des méthodes aditionnelles
+- il possède des méthodes aditionnelles
 	
 	controller(name)
 	injector()
@@ -203,7 +203,6 @@ L'objet event contient les properties :
 - les attributs sont partagés par tous les éléments d'une même directive
 
 
-
 ### Propriété scope d'une directive
 
 3 valeurs
@@ -225,7 +224,7 @@ L'objet event contient les properties :
 
 	{ prop1 : '@attr'} // attribut texte (le plus rare) 
 
-	//  on peut le remplacer par attr.xxx (si l'attr ne peut pas contenir d'expression)
+	// on peut le remplacer par attr.xxx (si l'attr ne peut pas contenir d'expression)
 	// ou attrs.$observe('xxx', function(value)...)
 
 	{ prop2 : '=attr'} // contient une expression angular qui sert de binding (le plus courant)
@@ -240,7 +239,7 @@ L'objet event contient les properties :
 
 ** dans les 3 cas, si on ne met rien après le caractère, il prend le nom de l'attribut **
 
-##### @
+##### Scope isolé avec @
 
 - binding mono-directionnel de la propriété sur la valeur d'un attribut texte
 
@@ -252,7 +251,7 @@ L'objet event contient les properties :
 
 - les expressions sont évalués sur le scope parent du scope isolé
 
-##### Scope isolé 
+##### Scope isolé avec '='
 
 - l'attribut contient une expression sans {{}}
 - l'expression désigne une propriété du scope parent
@@ -265,7 +264,7 @@ L'objet event contient les properties :
 
 - résultat d'une fonction : ça ne marche pas. Il faut une expression assignable.
 
-##### Scope isolé
+##### Scope isolé avec "&"
 
 	<delete-button action='remove(user)'
 	scope: {
@@ -283,7 +282,7 @@ L'objet event contient les properties :
 
 - template (html) : c'est un template HTML Angular, créé par la directive, à l'intérieur ou à la place de l'élément courant suivant la valeur de replace
 
-- ou  bien templateUrl 
+- ou bien passé à travers la propriété : templateUrl 
 
 - replace = true : le contenu remplace l'élément courant / il remplace un élément par un élément  
 	-- false pour qu'il soit généré à l'intérieur.
@@ -296,7 +295,7 @@ L'objet event contient les properties :
 - on peut récupérer le transclude en le passant en param de la fonction link
 
 
-### Controller
+### Controller sur une directive
 
 use case : partage de controleur entres directives
 

@@ -227,7 +227,9 @@ routeur plus évolué : uirouter
 
 - si dans le template on veut faire une redirection :
 	
+
 	href="#/Book/{{book.id}}" // géré par le navigateur , d'ou la nécessité de préciser le #
+
 
 - dans un controller / avec du JS
 

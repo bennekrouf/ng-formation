@@ -217,8 +217,6 @@ s'il est encore valide : il met ce token dans l'objet config de la requete et le
 - usage : mettre un gif animé
 
 
-
-
 ## $resource
 
 - s'appuie sur $http
