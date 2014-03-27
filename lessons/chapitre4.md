@@ -1,27 +1,49 @@
 # Chapitre 4 : $http & $resource
 =============================================================
 
+Ce chapitre traite les thèmes suivants :
+
+- $http
+- $resource
+- Vulnérabilités des browsers- Ce que fait Angular 
+
+
+
 
 ## $http
 
 - fonction : avec objet de config de la requete
+
 	$http(config)
 
-	config objet contenant :  method (GET, POST), 
-								data, 
-								url, 
-								headers, 
-								cache (à false par défaut, sinon garde en cache si la requête est complètement identique : data + headers..)
-								timeout, 
-								transformRequest, 
-								withCredentials (boolean : met sur l'objet XHR, permet d'envoyer les cookies des cross domain (uniquement), sinon les cookies du domaine de l'appli sont bien  toujours envoyés   )  
+- config objet contenant :
+	
+	method  : GET, POST...
+
+	data
+
+	url
+
+	headers
+
+	cache  : à false par défaut, sinon garde en cache si la requête est complètement identique : data + headers..)
+
+	timeout 
+
+	transformRequest 
+
+	withCredentials : boolean : met sur l'objet XHR, permet d'envoyer les cookies des cross domain (uniquement), sinon les cookies du domaine de l'appli sont envoyés par défaut
 
 - renvoie une promesse : avec une méthode success et une error
 
-	success et error renvoit this, avec 4 param
-		data, status, header, config
+-- success et error renvoient this, avec 4 param
 
-	error est exécuté si status d'erreur ou si le serveur ne répond pas
+		data
+		status
+		header
+		config
+
+-- error est exécuté si : status d'erreur ou si le serveur ne répond pas
 
 - possède des méthodes simplifiées
 
@@ -33,68 +55,92 @@
 - json : il faut qu'il soit valide rigouresement (plus que JS)
 
 
-## vulnérabilité 
+## Vulnérabilités des browsers- Ce que fait Angular 
 
-fait dans Angular :
+### Pb du tableau de JSON
 
-### JSON
+#### Contexte
 
-- une requete get qui renvoit un tableau de JSON, avec authent par cookie
-- si un pirate redirige un user vers une page de pishing avec une balise script avec l'url get qui renvoit le tableau json, le navigateur va envoyer la requete avec ses cookies, 
-- le navigateur va afficher le tableau parsé en  script sans faire d'erreur
-- => il suffit de surcharger la méthode Array.push et lui faire stocker ailleurs et exploiter les données 
+- Une requete get qui renvoit un tableau de JSON, avec authent par cookie
+- Un pirate redirige un user vers une page de pishing avec une balise script avec l'url get qui renvoit le tableau json
 
-Solution :
-- ne pas être authentifié par cookie
+=> le navigateur va envoyer la requete avec ses cookies
+=> le navigateur va afficher le tableau parsé en script sans faire d'erreur
+=> il suffit alors de surcharger la méthode Array.push et lui faire stocker ailleurs et exploiter les données
+
+#### Solutions générales
+
+- Ne pas être authentifié par cookie
 - ou objet premier niveau
-- solution Angular : préfixer toute les requetes envoyées au serveur par : ")]}" : si Angular voit se préfixe il l'ignore, et supprime cette vulnérabilité
 
-- (si objet alors erreur de syntaxe) 
+#### Solutions Angular
+
+- Angular préfixe toute les requetes envoyées au serveur par : ")]}" : si Angular voit ce préfixe il l'ignore, et supprime cette vulnérabilité
+
+- s'il s'agit d'un objet alors il n'y a pas de pb car erreur de syntaxe 
 
 ### CSRF/XSRF (Cross Site Request Forgery)
 
-- dans le cas ou : requete GET qui déclenche une action (delete) // très mauvais idée
-- facile à exploiter : dans une page de pishing, on met une image avec cette URL : sa déclenche l'action grâce aux param du user
+#### Contexte
 
-Solution
+- requete GET qui déclenche une action (delete) (très mauvais idée!)
+- facile à exploiter : dans une page de pishing, on met une image avec cette URL : un click déclenche l'action grâce aux param du user
+
+#### Solution générale
+
 - pas de requete GET sur une action
-- Angular : le serveur doit envoyer un cookie : XSRF-TOKEN, et angular va ajouter aux requetes un header X-XSRF-TOKEN avec la valeur du cookie, et le serveur doit vérifier la présence de ce cookie et la valeur de ce header  
 
-##Requetes Cross Domain
+#### Solution Angular
 
-2 méthodes
+- le serveur doit envoyer un cookie : XSRF-TOKEN, et angular va ajouter aux requetes un header X-XSRF-TOKEN avec la valeur du cookie, et le serveur doit vérifier la présence de ce cookie et la valeur de ce header  
 
-- Le pb : les navigateurs interdisent des requetes vers un autre domaine que le serveur qui sert (same origin policy)
+## Requetes Cross Domain
 
-### 1 - JSONP : insérer une balise script en mettant l'url de l'API comme url du script, ce qui va etre envoyé par la serveur va etre chargé comme du JS. Le serveur doit envoyer du JS.
+Same origin policy : Les navigateurs interdisent des requetes vers un autre domaine que le serveur d'origine
+
+2 méthodes pour by-passer cette contrainte :
+
+### 1 - JSONP
+
+Principe : Insérer une balise script en mettant l'url de l'API comme url du script, ce qui va etre envoyé par le serveur va etre chargé comme du JS. Le serveur doit envoyer du JS.
 	
-	le serveur doit etre prévue pour JSONP
 
-	il envoie un script qui appelle un callback en lui passant les données JSON
+- Le serveur doit etre prévue pour JSONP
 
-### 2 - CORS : (cross origin resource sharing) ne fonctionne pas sur tout les navigateurs (>= IE10)
-
-- Le serveur doit répondre avec un header : Access-Control-Allow-Origin
-
-- Rien à faire côté JS 
+- Il envoit un script qui appelle un callback en lui passant les données JSON
 
 
-## Conf $http
+### 2 - CORS (Cross Origin Resource Sharing)
 
-- grâce à $httpProvider
+- Ne fonctionne pas sur tout les navigateurs (>= IE10)
+
+- Le serveur doit répondre avec un header : `Access-Control-Allow-Origin`
+
+- Avantage : Rien à faire côté JS 
+
+
+## Configuration de $http
+
+- Se fait grâce à $httpProvider
+
 
 ## Transformation des requêtes et réponses
 
-- Par défault il y a 2 transformations :
+### Transformation standards du framework
 
-### Requete : si données envoyées non textuelles, elle est sérialisée
+- Il y a 2 transformations qui sont réalisés par défault par Angular:
 
-### Response: 
+- Sur les requêtes : si les données envoyées sont non textuelles, elle sont sérialisées
 
-#### Enlève le préfixe ")]}',\n"
-#### si réponse au format JSON alors désérialisation
+- Sur les réponses :
 
-### Custom
+	1 - Enlève le préfixe ")]}',\n"
+	2 - si réponse au format JSON alors désérialisation
+
+
+### Transformation custom : 3 méthodes
+
+#### 1 - $httpProvider.defaults.transformResponse
 
 	$httpProvider.defaults.transformResponse.push(fn) // ajout d'une transformation push ou unshift...
 
@@ -102,18 +148,19 @@ Solution
 
 	data = fn(data, headers) // doit renvoyer data transformé
 
-ou bien
+#### 2 - transformResponse, transformRequest
 
 	transformRequest: [fn1, fn2] // ce tableau remplace le tableau de defaults, penser à le recopier
 	transformResponse: [fn1, fn2] 
 
 
-ou bien : les intercepteurs de request et response (V1.2.0rc1)
+#### 3 - les intercepteurs de request et response (V1.2.0rc1)
 
 - l'intercepteur est un objet
 
 	- publié comme un service
 	- peut avoir comme propriétés 4 fonctions optionnelles
+
 
 	$provide.factory('myInterceptor', function(dependencies...){
 		return {
@@ -122,11 +169,12 @@ ou bien : les intercepteurs de request et response (V1.2.0rc1)
 		}		
 	})
 
+
 	// pour l'enregisrer
 	$httpProvider.interceptors.push('myIncerpetor')
 
 
-#### Propriété 'request'
+##### Propriété 'request'
 
 recoit l'objet config de la requete
 peut renvoyer:
@@ -137,22 +185,21 @@ peut renvoyer:
 usage :  ** le reprendre des slides **
 - pour ajouter un header ou un paramètre
 
-#### Propriété 'responseError'
+##### Propriété 'responseError'
 
 	'response' : function(response){
 		return response || $q.when(response)
 	}
 
-#### 'responseError'
+##### Usages des intercepteurs
 
-### Usages des intercepteurs
-
-#### gestion centralisée des messages d'erreurs
+- gestion centralisée des messages d'erreurs
 - détecter les erreurs
 
 
 #### token d'authentification à posteriori
-sur une requete le serveur répond que le token a expiré
+
+Sur une requete le serveur répond que le token a expiré
 l'intercepteur response le détecte, envoie une autre requete pour récupérer un nouveau token puis relance la requete initial
 l'intercepteur renvoie une nouvelle promise s'il a fallu faire une requete pour renouveller le token
 
