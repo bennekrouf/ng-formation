@@ -335,7 +335,7 @@ require: ['ngBind', '?ngClass', '^ngView']
 		// service qui sert à publier un morceau de template, il renvoit une fonction link, que l'on appel en passant le scope
 
 		// element: objet jquery avec le span
-		})
+	})
 
 
 
@@ -477,10 +477,3 @@ voir la directive de Chatel : angular-treeRepeat qui est un ng-repeat récursif
 -- animations CSS (>=10)
 
 -- Sans CSS (jquery) : ajout d'une 
-
-
-
-
-
-
-
