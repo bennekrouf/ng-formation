@@ -15,7 +15,7 @@ module.exports = function(config){
 
         ,files : [
             'vendor/angular/**/*.js'
-            ,'test/lib/*.js'
+         //   ,'test/lib/*.js'
             ,'app/**/*.js'
             ,'test/**/*.js'
             ,'test/*.js'

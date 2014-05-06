@@ -9,7 +9,7 @@ describe("test de controller", function(){
 		scope = $rootScope.$new();
 		ctrl = $controller('formation', {'$scope':scope});
 
-$httpBackend.expectGET(url).respond('[{ "ISBN-10" : "193398869X" , "rating" : 3 , "price" : 22.31 }]');
+		$httpBackend.expectGET(url).respond('[{ "ISBN-10" : "193398869X" , "rating" : 3 , "price" : 22.31 }]');
 
 	}));
 

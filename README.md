@@ -36,9 +36,7 @@ Puis se placer dans les répertoires app-* (il n'y pas toujours tout, au minimum 
 
 ===============================================================================================
 
-## Rien à voir : Quelques réponses autour de Git (source : résumé de StackoverFlow)
-
-
+## Rien à voir : Quelques réponses autour de Git (source : StackoverFlow)
 
 
 #### Comment forcer un "git pull" pour qu'il écrase les changements locaux ?

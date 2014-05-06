@@ -1,3 +1,4 @@
+'use strict';
 
 var lrSnippet = require('connect-livereload')({port: 35729 });
 var livereloadMiddleware = function(connect, options){
@@ -16,6 +17,7 @@ module.exports = function (grunt){
   grunt.loadNpmTasks('grunt-protractor-runner');
 
   grunt.registerTask('default', ['protractor:dev']);
+  grunt.registerTask('selenium', ['selenium']);
   grunt.registerTask('test', ['karma:watch']);
 
     var karmaConfig = function(configFile, customOptions) {
@@ -31,9 +33,22 @@ module.exports = function (grunt){
               unit: { options: karmaConfig('karma.conf.js', { singleRun:true, autoWatch: false, browsers: ['Chrome']})},
               watch: { options: karmaConfig('karma.conf.js', { singleRun:false, autoWatch: true}) }
             }
+,
+ selenium: {
+  
+    options: {
+      browsers: ['firefox','ie','chrome']
+    },
+    suite: {
+      files: {
+        'example.tap': ['test/source/**/*.suite']
+      }
+    }
+  }
 
   ,protractor: {
     options: {
+      configFile: "test/protractor/config.js",
       keepAlive: true, // If false, the grunt process stops when the test fails.
       noColor: false, // If true, protractor will not use colors in its output.
       args: {
@@ -41,8 +56,9 @@ module.exports = function (grunt){
       }
     },
     dev: {
-      options: {configFile: "test/protractor/config.js", // Target-specific config file
-        args: {} // Target-specific arguments
+      options: {
+         // configFile: "test/protractor/config.js", // Target-specific config file
+          args: {} // Target-specific arguments
       }
     }}
   })};
