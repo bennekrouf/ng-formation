@@ -147,9 +147,13 @@ L'objet event contient les properties :
 
 	return {
 		priority: 0 // default : le plus prioritaire est ng-repeat (1000)
+		
 		, restrict: 'A' // default, EACM, EA
+		
 		, scope: false
+		
 		, link: function(...) // même fonction que précédement
+		
 		, terminal : false // si true, ignore toutes les directives de priorités inférieures
 	}
 
